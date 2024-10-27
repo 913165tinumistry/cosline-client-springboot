@@ -1,11 +1,15 @@
 package org.similake.client.store;
 
 import org.similake.client.filtercriteria.SimilakeFilterExpressionConverter;
+import org.similake.client.properties.SimilakeProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.vectorstore.SearchRequest;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
@@ -18,14 +22,19 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class SimilakeVectorStore {
+//@Configuration
+public class SimilakeVectorStore implements InitializingBean {
+
+   // @Autowired
+    SimilakeProperties similakeProperties;
 
     private static final Logger logger = LoggerFactory.getLogger(SimilakeVectorStore.class);
     protected EmbeddingModel embeddingModel;
     protected Map<String, Document> store = new ConcurrentHashMap<>();
     private double[] coordinates;
-    public SimilakeVectorStore(EmbeddingModel embeddingModel) {
+    public SimilakeVectorStore(EmbeddingModel embeddingModel,SimilakeProperties similakeProperties) {
         this.embeddingModel = embeddingModel;
+        this.similakeProperties = similakeProperties;
     }
 
     public void add(List<Document> documents) {
@@ -92,6 +101,13 @@ public class SimilakeVectorStore {
         return result;
     }
 
+    @Override
+    public void afterPropertiesSet() throws Exception {
+           logger.info("SimilakeVectorStore initialized");
+        String property = System.getProperty("spring.ai.vectorstore.similake.host");
+        logger.info("SimilakeVectorStore initialized with property: {}", property);
+    }
+
     public static class Similarity {
         private String key;
         private double score;
@@ -100,18 +116,19 @@ public class SimilakeVectorStore {
             this.key = key;
             this.score = score;
         }
-
     }
 
     private void sendDocumentToApi(Document document) {
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:6767/collections/vector_store/payload";
+        logger.info("similakeProperties.getHost(): {}", similakeProperties.getHost());
+        String payloadUrl = "http://" +similakeProperties.getHost() + ":" + similakeProperties.getPort() + "/collections/" + similakeProperties.getCollectionName() + "/payload";
+        //String url = "http://localhost:6767/collections/vector_store/payload";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Document> request = new HttpEntity<>(document, headers);
         // Log the request
         logger.info("Sending request to API: {}", request.getBody());
-        restTemplate.postForEntity(url, request, String.class);
+        restTemplate.postForEntity(payloadUrl, request, String.class);
     }
 
     public List<Document> doSimilaritySearch(SearchRequest request) {
@@ -144,7 +161,8 @@ public class SimilakeVectorStore {
     public List<Document> getDocumentsFromApi(SearchRequest request) {
         SimilakeFilterExpressionConverter filterExpressionConverter = new SimilakeFilterExpressionConverter();
         RestTemplate restTemplate = new RestTemplate();
-        String baseUrl = "http://localhost:6767/collections/vector_store/payloads";
+        String pauloadUrl = "http://" + similakeProperties.getHost() + ":" + similakeProperties.getPort() + "/collections/" + similakeProperties.getCollectionName() + "/payloads";
+        //String baseUrl = "http://localhost:6767/collections/vector_store/payloads";
 
         // Convert filter expression to query parameters
         String queryParams = "";
@@ -153,9 +171,9 @@ public class SimilakeVectorStore {
         }
 
         // Build full URL with query parameters
-        String fullUrl = baseUrl;
+        String fullUrl = pauloadUrl;
         if (!queryParams.isEmpty()) {
-            fullUrl = baseUrl + "?" + queryParams;
+            fullUrl = pauloadUrl + "?" + queryParams;
         }
 
         logger.info("Sending request to URL: {}", fullUrl);

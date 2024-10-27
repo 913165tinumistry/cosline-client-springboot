@@ -23,6 +23,8 @@ public class SimilakeConfig {
 
     @Bean
     public String init() {
+        System.out.println("********************Initializing SimilakeConfig");
+        logger.info("********************Initializing SimilakeConfig");
         String returnMessage = "Properties not created";
         if (similakeProperties.isInitializeSchema()) {
             String collectionName = similakeProperties.getCollectionName();

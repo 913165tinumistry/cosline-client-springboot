@@ -1,13 +1,16 @@
 package org.similake.client.properties;
 
 import org.similake.client.model.Distance;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 @Configuration
 @ConfigurationProperties(prefix = "spring.ai.vectorstore.similake")
 public class SimilakeProperties {
-
+    @Autowired
+    private Environment env;
     private String host;
 
 
@@ -38,6 +41,8 @@ public class SimilakeProperties {
 
     // Getters and setters
     public String getHost() {
+        String envhost = env.getProperty("spring.ai.vectorstore.similake.host");
+        host = envhost;
         return host;
     }
 
