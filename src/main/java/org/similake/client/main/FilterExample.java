@@ -16,12 +16,11 @@ public class FilterExample {
         SimilakeFilterExpressionConverter converter = new SimilakeFilterExpressionConverter();
 
         // Single condition
-        Filter.Expression left = new Filter.Expression(
-                ExpressionType.EQ,
-                new Filter.Key("brand"),
-                new Filter.Value("Apple")
-        );
-        Filter.Expression singleExp = left;
+        Filter.Expression singleExp = new Filter.Expression(
+                        ExpressionType.EQ,
+                        new Filter.Key("brand"),
+                        new Filter.Value("Apple")
+                );
 
         SearchRequest searchRequest = SearchRequest.query("test")
                 .withTopK(5)
@@ -33,7 +32,11 @@ public class FilterExample {
         // Multiple conditions (brand=Apple AND product_name=Laptop)
         Filter.Expression multipleExp = new Filter.Expression(
                 ExpressionType.AND,
-                left,
+                new Filter.Expression(
+                        ExpressionType.EQ,
+                        new Filter.Key("brand"),
+                        new Filter.Value("Apple")
+                ),
                 new Filter.Expression(
                         ExpressionType.EQ,
                         new Filter.Key("product_name"),
@@ -51,7 +54,11 @@ public class FilterExample {
         // Complex conditions (brand=Apple AND price>1000 AND quantity<10)
         Filter.Expression complexExp = new Filter.Expression(
                 ExpressionType.AND,
-                left,
+                new Filter.Expression(
+                        ExpressionType.EQ,
+                        new Filter.Key("brand"),
+                        new Filter.Value("Apple")
+                ),
                 new Filter.Expression(
                         ExpressionType.AND,
                         new Filter.Expression(
@@ -99,7 +106,11 @@ public class FilterExample {
         // Example with OR conditions
         Filter.Expression orExp = new Filter.Expression(
                 ExpressionType.OR,
-                left,
+                new Filter.Expression(
+                        ExpressionType.EQ,
+                        new Filter.Key("brand"),
+                        new Filter.Value("Apple")
+                ),
                 new Filter.Expression(
                         ExpressionType.EQ,
                         new Filter.Key("brand"),

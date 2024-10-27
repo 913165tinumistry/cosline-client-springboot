@@ -1,5 +1,6 @@
 package org.similake.client.store;
 
+import org.similake.client.filtercriteria.SimilakeFilterExpressionConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
@@ -141,12 +142,26 @@ public class SimilakeVectorStore {
     }
 
     public List<Document> getDocumentsFromApi(SearchRequest request) {
+        SimilakeFilterExpressionConverter filterExpressionConverter = new SimilakeFilterExpressionConverter();
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:6767/collections/vector_store/payloads";
-      //  String nativeFilterExpression = request.getFilterExpression() != null ? this.filterExpressionConverter.convertExpression(request.getFilterExpression()) : "";
-       // logger.info("Sending request to nativeFilterExpression: {}", nativeFilterExpression);
+        String baseUrl = "http://localhost:6767/collections/vector_store/payloads";
+
+        // Convert filter expression to query parameters
+        String queryParams = "";
+        if (request.getFilterExpression() != null) {
+            queryParams = filterExpressionConverter.convertToQueryParams(request.getFilterExpression());
+        }
+
+        // Build full URL with query parameters
+        String fullUrl = baseUrl;
+        if (!queryParams.isEmpty()) {
+            fullUrl = baseUrl + "?" + queryParams;
+        }
+
+        logger.info("Sending request to URL: {}", fullUrl);
+
         ResponseEntity<List<Document>> response = restTemplate.exchange(
-                url,
+                fullUrl,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Document>>() {}
