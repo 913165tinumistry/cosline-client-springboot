@@ -114,7 +114,7 @@ public class SimilakeVectorStore {
     }
 
     public List<Document> doSimilaritySearch(SearchRequest request) {
-        Collection<Document> documents = getDocumentsFromApi();
+        Collection<Document> documents = getDocumentsFromApi(request);
 
         Map<String, Document> docuemntMap = documents.stream().collect(Collectors.toMap(Document::getId, Function.identity()));
 
@@ -131,7 +131,7 @@ public class SimilakeVectorStore {
 
 
                 .sorted(Comparator.<Similarity>comparingDouble(s -> s.score).reversed())
-                .limit(1)
+                .limit(request.getTopK())
                 .map(s -> docuemntMap.get(s.key))
                 .toList();
 
@@ -140,10 +140,11 @@ public class SimilakeVectorStore {
 
     }
 
-    public List<Document> getDocumentsFromApi() {
+    public List<Document> getDocumentsFromApi(SearchRequest request) {
         RestTemplate restTemplate = new RestTemplate();
         String url = "http://localhost:6767/collections/vector_store/payloads";
-
+      //  String nativeFilterExpression = request.getFilterExpression() != null ? this.filterExpressionConverter.convertExpression(request.getFilterExpression()) : "";
+       // logger.info("Sending request to nativeFilterExpression: {}", nativeFilterExpression);
         ResponseEntity<List<Document>> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
@@ -153,4 +154,6 @@ public class SimilakeVectorStore {
 
         return response.getBody();
     }
+
+
 }
