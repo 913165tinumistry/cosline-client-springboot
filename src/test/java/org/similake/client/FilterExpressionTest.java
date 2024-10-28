@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class FilterExampleTest {
+public class FilterExpressionTest {
 
     private SimilakeFilterExpressionConverter converter;
     private Filter.Expression leftExpression;

@@ -94,6 +94,7 @@ public class SimilakeFilterExpressionConverter extends AbstractFilterExpressionC
             case LTE -> ".lte=";
             case GT -> ".gt=";
             case GTE -> ".gte=";
+            case NOT -> ".not=";
             default -> throw new RuntimeException("Not supported expression type: " + exp.type());
         };
     }
