@@ -122,6 +122,7 @@ public class SimilakeVectorStore implements InitializingBean {
         RestTemplate restTemplate = new RestTemplate();
         logger.info("similakeProperties.getHost(): {}", similakeProperties.getHost());
         String payloadUrl = "http://" +similakeProperties.getHost() + ":" + similakeProperties.getPort() + "/collections/" + similakeProperties.getCollectionName() + "/payload";
+        logger.info("Sending request to URL: {}", payloadUrl);
         //String url = "http://localhost:6767/collections/vector_store/payload";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
