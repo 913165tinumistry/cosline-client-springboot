@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -18,9 +19,30 @@ public class SimilakeConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(SimilakeConfig.class);
 
-    @Autowired
+
+    //@Autowired
     SimilakeProperties similakeProperties;
 
+    public SimilakeConfig(Environment env) {
+        initprops(env);
+    }
+
+
+    public void initprops(Environment env) {
+        String host = env.getProperty("spring.ai.vectorstore.similake.host");
+        String port = env.getProperty("spring.ai.vectorstore.similake.port");
+        String collectionName = env.getProperty("spring.ai.vectorstore.similake.collection-name");
+        String initializeSchema = env.getProperty("spring.ai.vectorstore.similake.initialize-schema");
+        String dimension = env.getProperty("spring.ai.vectorstore.similake.dimension");
+        String distance = env.getProperty("spring.ai.vectorstore.similake.distance");
+
+        System.out.println("Host: " + host);
+        System.out.println("Port: " + port);
+        System.out.println("Collection Name: " + collectionName);
+        System.out.println("Initialize Schema: " + initializeSchema);
+        System.out.println("Dimension: " + dimension);
+        System.out.println("Distance: " + distance);
+    }
     @Bean
     public String init() {
         System.out.println("********************Initializing SimilakeConfig");
