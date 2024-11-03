@@ -19,15 +19,11 @@ public class SimilakeConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(SimilakeConfig.class);
 
-
     //@Autowired
     SimilakeProperties similakeProperties;
-
     public SimilakeConfig(Environment env) {
         initprops(env);
     }
-
-
     public void initprops(Environment env) {
         String host = env.getProperty("spring.ai.vectorstore.similake.host");
         String port = env.getProperty("spring.ai.vectorstore.similake.port");
@@ -36,13 +32,28 @@ public class SimilakeConfig {
         String dimension = env.getProperty("spring.ai.vectorstore.similake.dimension");
         String distance = env.getProperty("spring.ai.vectorstore.similake.distance");
 
-        System.out.println("Host: " + host);
-        System.out.println("Port: " + port);
-        System.out.println("Collection Name: " + collectionName);
-        System.out.println("Initialize Schema: " + initializeSchema);
-        System.out.println("Dimension: " + dimension);
-        System.out.println("Distance: " + distance);
+        logger.info("Host: {}", host);
+        logger.info("Port: {}", port);
+        logger.info("Collection Name: {}", collectionName);
+        logger.info("Initialize Schema: {}", initializeSchema);
+        logger.info("Dimension: {}", dimension);
+        logger.info("Distance: {}", distance);
+        similakeProperties = new SimilakeProperties();
+        similakeProperties.setHost(env.getProperty("spring.ai.vectorstore.similake.host"));
+        similakeProperties.setPort(Integer.parseInt(env.getProperty("spring.ai.vectorstore.similake.port")));
+        similakeProperties.setCollectionName(env.getProperty("spring.ai.vectorstore.similake.collection-name"));
+        similakeProperties.setInitializeSchema(Boolean.parseBoolean(env.getProperty("spring.ai.vectorstore.similake.initialize-schema")));
+        similakeProperties.setDimension(Integer.parseInt(env.getProperty("spring.ai.vectorstore.similake.dimension")));
+        similakeProperties.setDistance(Distance.valueOf(env.getProperty("spring.ai.vectorstore.similake.distance")));
+        similakeProperties.setApiKey(env.getProperty("spring.ai.vectorstore.similake.api-key"));
+
+        if(initializeSchema != null && initializeSchema.equalsIgnoreCase("true")) {
+            init();
+        } else {
+            logger.info("Properties not initialized for initialization = true");
+        }
     }
+
     @Bean
     public String init() {
         System.out.println("********************Initializing SimilakeConfig");
