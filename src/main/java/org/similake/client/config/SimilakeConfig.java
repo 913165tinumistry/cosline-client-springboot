@@ -22,6 +22,7 @@ public class SimilakeConfig {
     //@Autowired
     SimilakeProperties similakeProperties;
     public SimilakeConfig(Environment env) {
+        String isApp = System.getenv("isApp");
         initprops(env);
     }
     public void initprops(Environment env) {
@@ -79,7 +80,7 @@ public class SimilakeConfig {
             logger.info("URL: {}", url);
             ResponseEntity<String> response = restTemplate.exchange(
                     url,
-                    HttpMethod.PUT,
+                    HttpMethod.POST,
                     entity,
                     String.class);
             returnMessage = response.getBody();

@@ -55,7 +55,7 @@ class SimilakeVectorStoreTest {
 
     @Container
     static GenericContainer<?> similakemContainer = new GenericContainer<>(
-            DockerImageName.parse("tinumistry/similake:2.0"))
+            DockerImageName.parse("tinumistry/similake"))
 
             .withExposedPorts(CONTAINER_PORT);
 

@@ -14,10 +14,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -71,6 +68,9 @@ public class SimilakeVectorStore implements InitializingBean {
     }
 
     public static double cosineSimilarity(float[] vectorX, float[] vectorY) {
+        logger.info("VectorX length: {}, VectorY length: {}", vectorX.length, vectorY.length);
+        logger.info("VectorX: {}", Arrays.toString(vectorX));
+        logger.info("VectorY: {}", Arrays.toString(vectorY));
         if (vectorX == null || vectorY == null) {
             throw new RuntimeException("Vectors must not be null");
         }
@@ -139,6 +139,7 @@ public class SimilakeVectorStore implements InitializingBean {
 
         logger.info("Received {} documents from API", documents);
         float[] userQueryEmbedding = getUserQueryEmbedding(request.getQuery());
+        logger.info("User query embedding: {}", userQueryEmbedding);
         List<Document> list = documents
                 .stream()
                 .map(entry -> new Similarity(entry.getId(),
@@ -162,7 +163,7 @@ public class SimilakeVectorStore implements InitializingBean {
     public List<Document> getDocumentsFromApi(SearchRequest request) {
         SimilakeFilterExpressionConverter filterExpressionConverter = new SimilakeFilterExpressionConverter();
         RestTemplate restTemplate = new RestTemplate();
-        String pauloadUrl = "http://" + similakeProperties.getHost() + ":" + similakeProperties.getPort() + "/collections/" + similakeProperties.getCollectionName() + "/payloads";
+        String payloadUrl = "http://" + similakeProperties.getHost() + ":" + similakeProperties.getPort() + "/collections/" + similakeProperties.getCollectionName() + "/payloads";
         //String baseUrl = "http://localhost:6767/collections/vector_store/payloads";
 
         // Convert filter expression to query parameters
@@ -172,9 +173,9 @@ public class SimilakeVectorStore implements InitializingBean {
         }
 
         // Build full URL with query parameters
-        String fullUrl = pauloadUrl;
+        String fullUrl = payloadUrl;
         if (!queryParams.isEmpty()) {
-            fullUrl = pauloadUrl + "?" + queryParams;
+            fullUrl = payloadUrl + "?" + queryParams;
         }
 
         logger.info("Sending request to URL: {}", fullUrl);
