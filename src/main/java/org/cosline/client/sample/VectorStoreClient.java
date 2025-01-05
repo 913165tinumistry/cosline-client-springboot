@@ -1,4 +1,4 @@
-package org.similake.client.sample;
+package org.cosline.client.sample;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;

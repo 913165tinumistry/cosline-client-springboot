@@ -1,8 +1,8 @@
-package org.similake.client;
+package org.cosline.client;
 
+import org.cosline.client.filtercriteria.CoslineFilterExpressionConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.similake.client.filtercriteria.SimilakeFilterExpressionConverter;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.filter.Filter;
 import org.springframework.ai.vectorstore.filter.Filter.ExpressionType;
@@ -13,12 +13,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FilterExpressionTest {
 
-    private SimilakeFilterExpressionConverter converter;
+    private CoslineFilterExpressionConverter converter;
     private Filter.Expression leftExpression;
 
     @BeforeEach
     void setUp() {
-        converter = new SimilakeFilterExpressionConverter();
+        converter = new CoslineFilterExpressionConverter();
         leftExpression = new Filter.Expression(
                 ExpressionType.EQ,
                 new Filter.Key("brand"),

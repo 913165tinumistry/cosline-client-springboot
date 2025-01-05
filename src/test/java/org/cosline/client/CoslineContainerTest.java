@@ -1,4 +1,4 @@
-package org.similake.client;
+package org.cosline.client;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +11,7 @@ import org.testcontainers.utility.DockerImageName;
 
 //@SpringBootTest
 @Testcontainers
-public class SimilakemContainerTest {
+public class CoslineContainerTest {
 
     private static final int CONTAINER_PORT = 6767;
 

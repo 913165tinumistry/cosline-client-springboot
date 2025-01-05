@@ -1,11 +1,11 @@
-package org.similake.client.filtercriteria;
+package org.cosline.client.filtercriteria;
 
 import org.springframework.ai.vectorstore.filter.Filter;
 import org.springframework.ai.vectorstore.filter.converter.AbstractFilterExpressionConverter;
 
 import java.util.List;
 
-public class SimilakeFilterExpressionConverter extends AbstractFilterExpressionConverter {
+public class CoslineFilterExpressionConverter extends AbstractFilterExpressionConverter {
 
     private StringBuilder queryParams = new StringBuilder();
     private boolean isFirstParam = true;

@@ -1,4 +1,4 @@
-package org.similake.client.sample;
+package org.cosline.client.sample;
 
 import java.util.Arrays;
 import java.util.Map;

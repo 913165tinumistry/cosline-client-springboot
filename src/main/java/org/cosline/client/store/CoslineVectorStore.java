@@ -1,15 +1,13 @@
-package org.similake.client.store;
+package org.cosline.client.store;
 
-import org.similake.client.filtercriteria.SimilakeFilterExpressionConverter;
-import org.similake.client.properties.SimilakeProperties;
+import org.cosline.client.filtercriteria.CoslineFilterExpressionConverter;
+import org.cosline.client.properties.CoslineProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
@@ -20,18 +18,18 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 //@Configuration
-public class SimilakeVectorStore implements InitializingBean {
+public class CoslineVectorStore implements InitializingBean {
 
    // @Autowired
-    SimilakeProperties similakeProperties;
+    CoslineProperties coslineProperties;
 
-    private static final Logger logger = LoggerFactory.getLogger(SimilakeVectorStore.class);
+    private static final Logger logger = LoggerFactory.getLogger(CoslineProperties.class);
     protected EmbeddingModel embeddingModel;
     protected Map<String, Document> store = new ConcurrentHashMap<>();
     private double[] coordinates;
-    public SimilakeVectorStore(EmbeddingModel embeddingModel,SimilakeProperties similakeProperties) {
+    public CoslineVectorStore(EmbeddingModel embeddingModel,CoslineProperties coslineProperties) {
         this.embeddingModel = embeddingModel;
-        this.similakeProperties = similakeProperties;
+        this.coslineProperties =  coslineProperties;
     }
 
     public void add(List<Document> documents) {
@@ -120,8 +118,8 @@ public class SimilakeVectorStore implements InitializingBean {
 
     private void sendDocumentToApi(Document document) {
         RestTemplate restTemplate = new RestTemplate();
-        logger.info("similakeProperties.getHost(): {}", similakeProperties.getHost());
-        String payloadUrl = "http://" +similakeProperties.getHost() + ":" + similakeProperties.getPort() + "/collections/" + similakeProperties.getCollectionName() + "/payload";
+        logger.info("similakeProperties.getHost(): {}", coslineProperties.getHost());
+        String payloadUrl = "http://" +coslineProperties.getHost() + ":" + coslineProperties.getPort() + "/collections/" + coslineProperties.getCollectionName() + "/payload";
         logger.info("Sending request to URL: {}", payloadUrl);
         //String url = "http://localhost:6767/collections/vector_store/payload";
         HttpHeaders headers = new HttpHeaders();
@@ -161,9 +159,9 @@ public class SimilakeVectorStore implements InitializingBean {
     }
 
     public List<Document> getDocumentsFromApi(SearchRequest request) {
-        SimilakeFilterExpressionConverter filterExpressionConverter = new SimilakeFilterExpressionConverter();
+        CoslineFilterExpressionConverter filterExpressionConverter = new CoslineFilterExpressionConverter();
         RestTemplate restTemplate = new RestTemplate();
-        String payloadUrl = "http://" + similakeProperties.getHost() + ":" + similakeProperties.getPort() + "/collections/" + similakeProperties.getCollectionName() + "/payloads";
+        String payloadUrl = "http://" + coslineProperties.getHost() + ":" + coslineProperties.getPort() + "/collections/" + coslineProperties.getCollectionName() + "/payloads";
         //String baseUrl = "http://localhost:6767/collections/vector_store/payloads";
 
         // Convert filter expression to query parameters

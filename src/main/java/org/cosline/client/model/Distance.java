@@ -1,4 +1,4 @@
-package org.similake.client.model;
+package org.cosline.client.model;
 
 /**
  * Enum to represent different types of distance measures with corresponding numeric values.

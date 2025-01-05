@@ -1,4 +1,4 @@
-package org.similake.client.filtercriteria;
+package org.cosline.client.filtercriteria;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,13 +10,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class SimilakeFilterExpressionConverterTest {
+class CoslineFilterExpressionConverterTest {
 
-    private SimilakeFilterExpressionConverter converter;
+    private CoslineFilterExpressionConverter converter;
 
     @BeforeEach
     void setUp() {
-        converter = new SimilakeFilterExpressionConverter();
+        converter = new CoslineFilterExpressionConverter();
     }
 
     @Test
@@ -40,7 +40,7 @@ class SimilakeFilterExpressionConverterTest {
         );
         assertEquals("metadata.age.gt=25", converter.convertToQueryParams(gtExpression));
 
-        converter = new SimilakeFilterExpressionConverter(); // Reset
+        converter = new CoslineFilterExpressionConverter(); // Reset
         Filter.Expression lteExpression = new Filter.Expression(
                 Filter.ExpressionType.LTE,
                 new Filter.Key("score"),
@@ -207,7 +207,7 @@ class SimilakeFilterExpressionConverterTest {
     }
 
     private void testOperator(Filter.ExpressionType type, String operator, String key, Object value) {
-        converter = new SimilakeFilterExpressionConverter(); // Reset state
+        converter = new CoslineFilterExpressionConverter(); // Reset state
         Filter.Expression expression = new Filter.Expression(
                 type,
                 new Filter.Key(key),

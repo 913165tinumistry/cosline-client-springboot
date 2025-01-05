@@ -1,6 +1,7 @@
-package org.similake.client.main;
+package org.cosline.client.main;
 
-import org.similake.client.filtercriteria.SimilakeFilterExpressionConverter;
+import org.cosline.client.filtercriteria.CoslineFilterExpressionConverter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.vectorstore.SearchRequest;
@@ -13,7 +14,7 @@ public class FilterExample {
     private static final Logger logger = LoggerFactory.getLogger(FilterExample.class);
 
     public static void main(String[] args) {
-        SimilakeFilterExpressionConverter converter = new SimilakeFilterExpressionConverter();
+        CoslineFilterExpressionConverter converter = new CoslineFilterExpressionConverter();
 
         // Single condition
         Filter.Expression singleExp = new Filter.Expression(

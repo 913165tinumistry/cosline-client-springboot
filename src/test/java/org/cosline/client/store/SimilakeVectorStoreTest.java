@@ -1,13 +1,12 @@
-package org.similake.client.store;
+package org.cosline.client.store;
 
 import com.squareup.okhttp.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.similake.client.model.Distance;
+import org.cosline.client.model.Distance;
 import org.similake.client.properties.SimilakeProperties;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
@@ -17,14 +16,12 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.http.MediaType;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.web.client.RestTemplate;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
