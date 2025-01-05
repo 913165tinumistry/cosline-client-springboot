@@ -7,7 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.cosline.client.model.Distance;
-import org.similake.client.properties.SimilakeProperties;
+import org.similake.client.properties.CoslineProperties;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.vectorstore.SearchRequest;
@@ -33,7 +33,7 @@ import static org.springframework.http.ResponseEntity.ok;
 
 @ExtendWith(MockitoExtension.class)
 @Testcontainers
-class SimilakeVectorStoreTest {
+class CoslineVectorStoreTest {
 
     @Mock
     private EmbeddingModel embeddingModel;
@@ -41,9 +41,9 @@ class SimilakeVectorStoreTest {
     @Mock
     private RestTemplate restTemplate;
 
-    private SimilakeProperties similakeProperties;
+    private CoslineProperties similakeProperties;
 
-    private SimilakeVectorStore vectorStore;
+    private CoslineVectorStore vectorStore;
 
     private static final int CONTAINER_PORT = 6767;
 
@@ -59,7 +59,7 @@ class SimilakeVectorStoreTest {
     @BeforeEach
     void init() throws IOException {
         Integer mappedPort = similakemContainer.getMappedPort(CONTAINER_PORT);
-        similakeProperties = new SimilakeProperties();
+        similakeProperties = new CoslineProperties();
         similakeProperties.setHost("localhost");
         similakeProperties.setPort(mappedPort);
         similakeProperties.setCollectionName("vector_store");
@@ -67,7 +67,7 @@ class SimilakeVectorStoreTest {
         similakeProperties.setInitializeSchema(true);
         similakeProperties.setApiKey("test-api-key");
         // Initialize your vectorStore with the mock and container URL
-        vectorStore = new SimilakeVectorStore(embeddingModel, similakeProperties);
+        vectorStore = new CoslineVectorStore(embeddingModel, similakeProperties);
         ResponseEntity<String> vectorStore1 = createVectorStore(mappedPort);
         System.out.println(vectorStore1);
         System.out.println("Vector store created successfully");
@@ -130,23 +130,23 @@ class SimilakeVectorStoreTest {
         // Test valid vectors
         float[] vector1 = new float[]{1.0f, 0.0f};
         float[] vector2 = new float[]{1.0f, 0.0f};
-        assertEquals(1.0, SimilakeVectorStore.cosineSimilarity(vector1, vector2), 0.0001);
+        assertEquals(1.0, CoslineVectorStore.cosineSimilarity(vector1, vector2), 0.0001);
 
         // Test orthogonal vectors
         float[] vector3 = new float[]{1.0f, 0.0f};
         float[] vector4 = new float[]{0.0f, 1.0f};
-        assertEquals(0.0, SimilakeVectorStore.cosineSimilarity(vector3, vector4), 0.0001);
+        assertEquals(0.0, CoslineVectorStore.cosineSimilarity(vector3, vector4), 0.0001);
 
         // Test different length vectors
         float[] vector5 = new float[]{1.0f};
         float[] vector6 = new float[]{1.0f, 0.0f};
         assertThrows(IllegalArgumentException.class, () ->
-                SimilakeVectorStore.cosineSimilarity(vector5, vector6)
+                CoslineVectorStore.cosineSimilarity(vector5, vector6)
         );
 
         // Test null vectors
         assertThrows(RuntimeException.class, () ->
-                SimilakeVectorStore.cosineSimilarity(null, vector1)
+                CoslineVectorStore.cosineSimilarity(null, vector1)
         );
     }
 
@@ -250,12 +250,12 @@ class SimilakeVectorStoreTest {
         float[] vector1 = new float[]{1.0f, 2.0f, 3.0f};
         float[] vector2 = new float[]{4.0f, 5.0f, 6.0f};
         float expectedDotProduct = 1.0f * 4.0f + 2.0f * 5.0f + 3.0f * 6.0f;
-        assertEquals(expectedDotProduct, SimilakeVectorStore.dotProduct(vector1, vector2), 0.0001);
+        assertEquals(expectedDotProduct, CoslineVectorStore.dotProduct(vector1, vector2), 0.0001);
 
         // Test different length vectors
         float[] vector3 = new float[]{1.0f, 2.0f};
         assertThrows(IllegalArgumentException.class, () ->
-                SimilakeVectorStore.dotProduct(vector1, vector3)
+                CoslineVectorStore.dotProduct(vector1, vector3)
         );
     }
 
@@ -264,10 +264,10 @@ class SimilakeVectorStoreTest {
         // Test valid vector
         float[] vector = new float[]{3.0f, 4.0f};
         float expectedNorm = 25.0f; // 3^2 + 4^2 = 25
-        assertEquals(expectedNorm, SimilakeVectorStore.norm(vector), 0.0001);
+        assertEquals(expectedNorm, CoslineVectorStore.norm(vector), 0.0001);
 
         // Test zero vector
         float[] zeroVector = new float[]{0.0f, 0.0f};
-        assertEquals(0.0f, SimilakeVectorStore.norm(zeroVector), 0.0001);
+        assertEquals(0.0f, CoslineVectorStore.norm(zeroVector), 0.0001);
     }
 }
