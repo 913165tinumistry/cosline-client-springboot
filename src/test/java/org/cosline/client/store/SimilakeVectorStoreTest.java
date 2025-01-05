@@ -1,13 +1,14 @@
 package org.cosline.client.store;
 
 import com.squareup.okhttp.*;
+import org.cosline.client.properties.CoslineProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.cosline.client.model.Distance;
-import org.similake.client.properties.CoslineProperties;
+
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.vectorstore.SearchRequest;
@@ -41,7 +42,7 @@ class CoslineVectorStoreTest {
     @Mock
     private RestTemplate restTemplate;
 
-    private CoslineProperties similakeProperties;
+    private CoslineProperties coslineProperties;
 
     private CoslineVectorStore vectorStore;
 
@@ -51,23 +52,23 @@ class CoslineVectorStoreTest {
     private Environment environment;
 
     @Container
-    static GenericContainer<?> similakemContainer = new GenericContainer<>(
-            DockerImageName.parse("tinumistry/similake"))
+    static GenericContainer<?> coslineContainer = new GenericContainer<>(
+            DockerImageName.parse("tinumistry/cosline"))
 
             .withExposedPorts(CONTAINER_PORT);
 
     @BeforeEach
     void init() throws IOException {
-        Integer mappedPort = similakemContainer.getMappedPort(CONTAINER_PORT);
-        similakeProperties = new CoslineProperties();
-        similakeProperties.setHost("localhost");
-        similakeProperties.setPort(mappedPort);
-        similakeProperties.setCollectionName("vector_store");
-        similakeProperties.setDistance(Distance.valueOf("Cosine"));
-        similakeProperties.setInitializeSchema(true);
-        similakeProperties.setApiKey("test-api-key");
+        Integer mappedPort = coslineContainer.getMappedPort(CONTAINER_PORT);
+        coslineProperties = new CoslineProperties();
+        coslineProperties.setHost("localhost");
+        coslineProperties.setPort(mappedPort);
+        coslineProperties.setCollectionName("vector_store");
+        coslineProperties.setDistance(Distance.valueOf("Cosine"));
+        coslineProperties.setInitializeSchema(true);
+        coslineProperties.setApiKey("test-api-key");
         // Initialize your vectorStore with the mock and container URL
-        vectorStore = new CoslineVectorStore(embeddingModel, similakeProperties);
+        vectorStore = new CoslineVectorStore(embeddingModel, coslineProperties);
         ResponseEntity<String> vectorStore1 = createVectorStore(mappedPort);
         System.out.println(vectorStore1);
         System.out.println("Vector store created successfully");
@@ -102,7 +103,7 @@ class CoslineVectorStoreTest {
         doReturn(embedding).when(embeddingModel).embed(any(Document.class));
         vectorStore.add(documents);
 
-        ResponseEntity<List<Document>> vectorStorePayloads = getVectorStorePayloads(similakeProperties.getHost(), similakeProperties.getPort(), similakeProperties.getCollectionName());
+        ResponseEntity<List<Document>> vectorStorePayloads = getVectorStorePayloads(coslineProperties.getHost(), coslineProperties.getPort(), coslineProperties.getCollectionName());
         assertEquals(1, vectorStorePayloads.getBody().size());
         System.out.println(vectorStorePayloads.getBody().get(0).getEmbedding().length);
     }

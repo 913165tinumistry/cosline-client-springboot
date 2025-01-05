@@ -101,9 +101,9 @@ public class CoslineVectorStore implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-           logger.info("SimilakeVectorStore initialized");
-        String property = System.getProperty("spring.ai.vectorstore.similake.host");
-        logger.info("SimilakeVectorStore initialized with property: {}", property);
+           logger.info("CoslineVectorStore initialized");
+        String property = System.getProperty("spring.ai.vectorstore.cosline.host");
+        logger.info("CoslineVectorStore initialized with property: {}", property);
     }
 
     public static class Similarity {
@@ -118,7 +118,7 @@ public class CoslineVectorStore implements InitializingBean {
 
     private void sendDocumentToApi(Document document) {
         RestTemplate restTemplate = new RestTemplate();
-        logger.info("similakeProperties.getHost(): {}", coslineProperties.getHost());
+        logger.info("coslineProperties.getHost(): {}", coslineProperties.getHost());
         String payloadUrl = "http://" +coslineProperties.getHost() + ":" + coslineProperties.getPort() + "/collections/" + coslineProperties.getCollectionName() + "/payload";
         logger.info("Sending request to URL: {}", payloadUrl);
         //String url = "http://localhost:6767/collections/vector_store/payload";

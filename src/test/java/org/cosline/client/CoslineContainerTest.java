@@ -16,24 +16,24 @@ public class CoslineContainerTest {
     private static final int CONTAINER_PORT = 6767;
 
     @Container
-    static GenericContainer<?> similakemContainer = new GenericContainer<>(
-            DockerImageName.parse("tinumistry/similake"))
+    static GenericContainer<?> coslineContainer = new GenericContainer<>(
+            DockerImageName.parse("tinumistry/cosline"))
             .withExposedPorts(CONTAINER_PORT)
             ;
 
     @DynamicPropertySource
     static void properties(DynamicPropertyRegistry registry) {
-        registry.add("app.similakem.url", 
-            () -> String.format("http://localhost:%d", 
-                similakemContainer.getMappedPort(CONTAINER_PORT)));
+        registry.add("app.cosline.url",
+            () -> String.format("http://localhost:%d",
+                    coslineContainer.getMappedPort(CONTAINER_PORT)));
     }
 
     @Test
     void containerShouldStart() {
-        assert similakemContainer.isRunning();
+        assert coslineContainer.isRunning();
         
         // Get the mapped port
-        Integer mappedPort = similakemContainer.getMappedPort(CONTAINER_PORT);
+        Integer mappedPort = coslineContainer.getMappedPort(CONTAINER_PORT);
         System.out.println("Container is running on port: " + mappedPort);
         
         // Add your test logic here

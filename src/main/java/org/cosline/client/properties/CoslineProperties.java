@@ -41,8 +41,7 @@ public class CoslineProperties {
 
     // Getters and setters
     public String getHost() {
-       // String envhost = env.getProperty("spring.ai.vectorstore.similake.host");
-       // host = envhost;return
+
         return host;
     }
 
