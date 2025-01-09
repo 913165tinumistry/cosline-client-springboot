@@ -161,7 +161,7 @@ public class CoslineVectorStore implements InitializingBean {
     public List<Document> getDocumentsFromApi(SearchRequest request) {
         CoslineFilterExpressionConverter filterExpressionConverter = new CoslineFilterExpressionConverter();
         RestTemplate restTemplate = new RestTemplate();
-        String payloadUrl = "http://" + coslineProperties.getHost() + ":" + coslineProperties.getPort() + "/collections/" + coslineProperties.getCollectionName() + "/payloads";
+        String payloadUrl = "http://" + coslineProperties.getHost() + ":" + coslineProperties.getPort() + "/v1/api/collections/" + coslineProperties.getCollectionName() + "/payloads";
         //String baseUrl = "http://localhost:6767/collections/vector_store/payloads";
 
         // Convert filter expression to query parameters
