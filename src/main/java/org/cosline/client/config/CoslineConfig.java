@@ -72,7 +72,7 @@ public class CoslineConfig {
             headers.set("Content-Type", "application/json");
             RestTemplate restTemplate = new RestTemplate();
             HttpEntity<String> entity = new HttpEntity<>(requestPayload, headers);
-            String url = String.format("http://%s:%d/collections/%s",
+            String url = String.format("http://%s:%d/api/v1/collections/%s",
                     coslineProperties.getHost(),
                     coslineProperties.getPort(),
                     coslineProperties.getCollectionName());

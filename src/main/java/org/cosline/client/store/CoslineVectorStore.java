@@ -119,7 +119,7 @@ public class CoslineVectorStore implements InitializingBean {
     private void sendDocumentToApi(Document document) {
         RestTemplate restTemplate = new RestTemplate();
         logger.info("coslineProperties.getHost(): {}", coslineProperties.getHost());
-        String payloadUrl = "http://" +coslineProperties.getHost() + ":" + coslineProperties.getPort() + "/collections/" + coslineProperties.getCollectionName() + "/payload";
+        String payloadUrl = "http://" +coslineProperties.getHost() + ":" + coslineProperties.getPort() + "/api/v1/collections/" + coslineProperties.getCollectionName() + "/payload";
         logger.info("Sending request to URL: {}", payloadUrl);
         //String url = "http://localhost:6767/collections/vector_store/payload";
         HttpHeaders headers = new HttpHeaders();
